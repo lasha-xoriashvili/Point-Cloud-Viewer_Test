@@ -1,0 +1,21 @@
+#pragma kernel CSMain
+
+struct Point
+{
+    float3 position;
+}; // <--- აქ აკლდა წერტილ-მძიმე (;)
+
+RWStructuredBuffer<Point> pointBuffer;
+RWStructuredBuffer<Point> targetBuffer;
+float TransitionSpeed;
+
+[numthreads(64, 1, 1)] // <--- აქ ეწერა "numethreads" (ზედმეტი 'e')
+void CSMain(uint3 id : SV_DispatchThreadID) // <--- SV_DispatchThreadID (ასოების ზომას აქვს მნიშვნელობა)
+{
+    uint index = id.x;
+
+    float3 currentPos = pointBuffer[index].position;
+    float3 targetPos = targetBuffer[index].position;
+
+    pointBuffer[index].position = lerp(currentPos, targetPos, TransitionSpeed);
+}
